@@ -4,14 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Schedule Planner</title>
-  <script defer src="app.js"></script>
+  <!-- <script defer src="app.js"></script> -->
+  <script type="module" src="app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 text-gray-900">
-  <div class="max-w-2xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-4">📅 Schedule Planner</h1>
-    <div id="calendar-grid" class="grid grid-cols-5 gap-2"></div>
-    <button id="submit-btn" class="mt-6 px-4 py-2 bg-blue-600 text-white rounded">Submit Availability</button>
+<body class="bg-neutral-50 text-gray-900 font-mono">
+  <div class="max-w-3xl mx-auto px-6 py-10">
+    <h1 class="text-slate-700 text-4xl mt-8 text-center">Schedule Planner</h1>
+
+    <div class="flex flex-col md:flex-row gap-4 mt-10 items-center justify-center">
+      <input
+        id="name-input"
+        type="text"
+        placeholder="Enter your name"
+        class="border border-gray-300 rounded px-4 py-2"
+      />
+      <select id="timezone-select" class="border border-gray-300 rounded px-4 py-2">
+        <option value="America/Los_Angeles">San Francisco</option>
+        <option value="Asia/Shanghai">China</option>
+        <option value="America/New_York">New York</option>
+      </select>
+    </div>
+
+    <div class="flex justify-center overflow-x-auto mt-6">
+      <div id="calendar-grid" class="text-center"></div>
+    </div>
+
+    
+    <button
+      id="submit-btn"
+      class="block mx-auto mt-10 py-2 px-4 bg-sky-500 text-white rounded hover:bg-sky-600 w-auto"
+    >
+      Submit Availability
+    </button>
+    <button
+      id="toggle-overlap-btn"
+      class="block mx-auto mt-10 py-2 px-4 bg-indigo-400 text-white rounded hover:bg-indigo-500 w-auto"
+    >
+      Show Availabilities
+    </button>
   </div>
 </body>
 </html>
