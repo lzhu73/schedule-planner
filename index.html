@@ -4,45 +4,76 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Schedule Planner</title>
-  <!-- <script defer src="app.js"></script> -->
   <script type="module" src="app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-neutral-50 text-gray-900 font-mono">
-  <div class="max-w-3xl mx-auto px-6 py-10">
+  <div class="max-w-xl mx-auto px-6 py-10">
     <h1 class="text-slate-700 text-4xl mt-8 text-center">Schedule Planner</h1>
 
-    <div class="flex flex-col md:flex-row gap-4 mt-10 items-center justify-center">
-      <input
-        id="name-input"
-        type="text"
-        placeholder="Enter your name"
-        class="border border-gray-300 rounded px-4 py-2"
-      />
-      <select id="timezone-select" class="border border-gray-300 rounded px-4 py-2">
+    <div class="flex flex-col gap-4 mt-10 items-center">
+      <button
+        id="input-btn"
+        class="py-2 px-4 bg-sky-500 text-white rounded hover:bg-sky-600 w-full max-w-md"
+      >
+        Input Schedule
+      </button>
+
+      <button
+        id="view-btn"
+        class="py-2 px-4 bg-indigo-500 text-white rounded hover:bg-indigo-600 w-full max-w-md"
+      >
+        Show Availability
+      </button>
+
+      <button
+        id="clear-all-btn"
+        class="py-2 px-4 bg-orange-400 text-white rounded hover:bg-orange-600 w-full max-w-md"
+      >
+        Clear All Schedules (This Week)
+      </button>
+    </div>
+  </div>
+
+  <!-- Timezone selection modal -->
+  <div id="tz-modal" class="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center hidden z-50">
+    <div class="bg-white p-6 rounded shadow-lg text-center space-y-4 w-72">
+      <h2 class="text-xl font-semibold">Select Timezone</h2>
+      <select id="modal-tz-select" class="border border-gray-300 rounded px-4 py-2 w-full">
         <option value="America/Los_Angeles">San Francisco</option>
         <option value="Asia/Shanghai">China</option>
-        <option value="America/New_York">New York</option>
       </select>
+      <button
+        id="modal-confirm-btn"
+        class="py-2 px-4 bg-indigo-500 text-white rounded hover:bg-indigo-600 w-full"
+      >
+        View Availability
+      </button>
     </div>
-
-    <div class="flex justify-center overflow-x-auto mt-6">
-      <div id="calendar-grid" class="text-center"></div>
-    </div>
-
-    
-    <button
-      id="submit-btn"
-      class="block mx-auto mt-10 py-2 px-4 bg-sky-500 text-white rounded hover:bg-sky-600 w-auto"
-    >
-      Submit Availability
-    </button>
-    <button
-      id="toggle-overlap-btn"
-      class="block mx-auto mt-10 py-2 px-4 bg-indigo-400 text-white rounded hover:bg-indigo-500 w-auto"
-    >
-      Show Availabilities
-    </button>
   </div>
+
+  <script type="module">
+    import { clearAllData } from "./app.js";
+
+    document.getElementById("input-btn").onclick = () => {
+      window.location.href = "input.html";
+    };
+
+    document.getElementById("view-btn").onclick = () => {
+      document.getElementById("tz-modal").classList.remove("hidden");
+    };
+
+    document.getElementById("modal-confirm-btn").onclick = () => {
+      const tz = encodeURIComponent(document.getElementById("modal-tz-select").value);
+      window.location.href = `availability.html?tz=${tz}`;
+    };
+
+    document.getElementById("clear-all-btn").onclick = async () => {
+      if (confirm("Are you sure you want to delete all users' schedules for this week?")) {
+        await clearAllData();
+      }
+    };
+  </script>
 </body>
 </html>

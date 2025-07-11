@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input Schedule</title>
+  <script type="module" src="app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-neutral-50 text-gray-900 font-mono">
+
+  <!-- Input Modal -->
+  <div id="input-modal" class="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg text-center space-y-4 w-80">
+      <h2 class="text-xl">Input name & timezone:</h2>
+      <input
+        id="modal-name-input"
+        type="text"
+        placeholder="Enter your name"
+        class="border border-gray-300 rounded px-4 py-2 w-full"
+      />
+      <select id="modal-tz-select" class="border border-gray-300 rounded px-4 py-2 w-full">
+        <option value="America/Los_Angeles">San Francisco</option>
+        <option value="Asia/Shanghai">China</option>
+      </select>
+      <button
+        id="modal-submit-btn"
+        class="py-2 px-4 bg-sky-500 text-white rounded hover:bg-sky-600 w-full"
+      >
+        Start Input
+      </button>
+    </div>
+  </div>
+
+  <div class="max-w-4xl mx-auto px-4 py-6">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-slate-700 text-2xl">Input Your Schedule</h1>
+      <a href="index.html" class="text-gray-500 underline text-sm">← Back to Home</a>
+    </div>
+
+    <div id="calendar-container">
+      <div class="flex justify-center overflow-x-auto mb-4">
+        <div id="calendar-grid" class="text-center"></div>
+      </div>
+
+      <!-- Side-by-side buttons -->
+      <div class="flex justify-center gap-4 mt-6">
+        <button
+          id="submit-btn"
+          class="py-2 px-4 bg-sky-500 text-white rounded hover:bg-sky-600"
+        >
+          Submit Availability
+        </button>
+
+        <button
+          id="clear-user-btn"
+          class="py-2 px-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+        >
+          Clear My Schedule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { buildCalendarTable, selectedSlots, saveAvailability } from './app.js';
+    import { clearUserData } from "./app.js";
+
+    const modal = document.getElementById("input-modal");
+    const nameField = document.getElementById("modal-name-input");
+    const tzField = document.getElementById("modal-tz-select");
+
+    document.getElementById("modal-submit-btn").onclick = () => {
+      const nameInput = nameField.value.trim();
+      const tzInput = tzField.value;
+      if (!nameInput || !tzInput) {
+        alert("Please fill out both name and timezone.");
+        return;
+      }
+
+      localStorage.setItem("schedule-name", nameInput);
+      localStorage.setItem("schedule-tz", tzInput);
+      modal.classList.add("hidden");
+      buildCalendarTable(tzInput, nameInput);
+
+      document.getElementById("submit-btn").onclick = async () => {
+        await saveAvailability(nameInput, tzInput, selectedSlots);
+      };
+
+      document.getElementById("clear-user-btn").onclick = async () => {
+        if (confirm(`Clear all your saved schedule for ${nameInput}?`)) {
+          await clearUserData(nameInput);
+        }
+      };
+    };
+  </script>
+</body>
+</html>
